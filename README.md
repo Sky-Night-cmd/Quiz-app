@@ -1,2 +1,2 @@
 # Quiz-app
- A simple and interactive Quiz App built with HTML, CSS, and JavaScript. It allows users to answer multiple-choice questions, get instant feedback, and see their final score.
+A stylish, glowing neon-themed Quiz App built using pure HTML, CSS, and JavaScript. Users can enter their name, answer multiple-choice questions, and view a summary of their results with a percentage score and performance message — all within a 60-second countdown.
