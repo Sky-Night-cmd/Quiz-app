@@ -2,244 +2,316 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quiz App</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
   <style>
     * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0; box-sizing: border-box;
     }
-
     body {
       font-family: 'Orbitron', sans-serif;
-      background: radial-gradient(circle, #000000, #0c0c0c);
+      background: radial-gradient(circle, #000, #0c0c0c);
       color: #00ffff;
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
       padding: 20px;
+      position: relative;
     }
-
+    .made-by {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #00ffff;
+      background: #000000aa;
+      border: 1px solid #00ffff66;
+      padding: 8px 14px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px #00ffff99;
+      text-shadow: 0 0 6px #00ffff;
+      z-index: 1000;
+    }
     .container {
       width: 100%;
-      max-width: 600px;
+      max-width: 700px;
       background: #111;
       border-radius: 16px;
       padding: 2rem;
+      box-shadow: 0 0 30px #00ffff44;
       text-align: center;
-      box-shadow: 0 0 35px #00ffff66;
       border: 2px solid #00ffff33;
-      transition: 0.4s ease-in-out;
     }
-
-    h1, h2 {
-      margin-bottom: 1rem;
-      text-shadow: 0 0 12px #00ffff;
+    .hide { display: none; }
+    h1, h2, h3 { margin-bottom: 1rem; text-shadow: 0 0 10px #00ffff; }
+    input[type="text"] {
+      padding: 12px;
+      font-size: 1rem;
+      margin-top: 10px;
+      border-radius: 6px;
+      border: 1px solid #00ffff77;
+      background: #000;
+      color: #00ffff;
+      width: 80%;
     }
-
     .btn {
-      padding: 0.8rem 2rem;
-      margin-top: 1.5rem;
+      padding: 10px 20px;
+      margin: 1rem 10px 0;
       border: none;
       border-radius: 8px;
       background: #00ffff;
       color: #000;
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: bold;
       cursor: pointer;
       box-shadow: 0 0 20px #00ffff99;
       transition: 0.2s ease-in-out;
     }
-
     .btn:hover {
       transform: scale(1.05);
       box-shadow: 0 0 30px #00ffff;
     }
-
-    .btn:disabled {
-      background: #00ffff55;
-      cursor: not-allowed;
-      box-shadow: none;
+    .question-player {
+      margin: 10px 0;
+      font-size: 1rem;
+      color: #00ffcc;
+      text-shadow: 0 0 6px #00ffcc99;
     }
-
-    .hide {
-      display: none;
-    }
-
     .question {
-      margin: 1.5rem 0 1rem;
+      margin: 1rem 0;
       font-size: 1.4rem;
-      text-shadow: 0 0 10px #00ffffcc;
     }
-
     .answers {
       display: flex;
       flex-direction: column;
       gap: 15px;
+      margin-top: 10px;
     }
-
     .answer {
-      padding: 14px;
+      padding: 15px;
       background: #1b1b1b;
       border: 1px solid #00ffff55;
       border-radius: 10px;
       color: #00ffff;
       cursor: pointer;
-      font-size: 1rem;
-      transition: 0.3s ease-in-out;
+      font-size: 1.1rem;
+      transition: 0.3s ease;
     }
-
     .answer:hover {
       background-color: #00ffff22;
-      box-shadow: 0 0 12px #00ffff;
+      box-shadow: 0 0 10px #00ffff;
     }
-
     .answer.correct {
-      background-color: #003333;
+      background-color: #004d4d;
       border-color: #00ff99;
-      box-shadow: 0 0 15px #00ff99;
+      box-shadow: 0 0 12px #00ff99;
     }
-
     .answer.wrong {
-      background-color: #330000;
+      background-color: #4d0000;
       border-color: #ff4444;
-      box-shadow: 0 0 15px #ff4444;
+      box-shadow: 0 0 12px #ff4444;
     }
-
     .answer:disabled {
       cursor: not-allowed;
       opacity: 0.6;
     }
-
-    .score-section {
-      font-size: 1.3rem;
+    .progress {
       margin-top: 1rem;
-      color: #00ffff;
-      text-shadow: 0 0 10px #00ffff;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: #00ffffaa;
+    }
+    .timer {
+      margin-top: 0.5rem;
+      font-size: 1.1rem;
+      color: #00ffffcc;
+    }
+    table {
+      width: 100%;
+      margin-top: 1rem;
+      border-collapse: collapse;
+      box-shadow: 0 0 10px #00ffff44;
+    }
+    table td, table th {
+      border: 1px solid #00ffff33;
+      padding: 10px;
+      text-align: left;
+    }
+    table tr:nth-child(even) {
+      background-color: #1a1a1a;
+    }
+    .result-title {
+      color: red;
+      font-weight: bold;
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+    }
+    .result-emoji {
+      font-size: 2.5rem;
+      margin-left: 5px;
     }
   </style>
 </head>
 <body>
+  <div class="made-by">🔹 Made by Mian Arif Mehmood</div>
+  <div class="container">
+    <!-- Username Screen -->
+    <div id="username-screen">
+      <h1>Welcome to the Quiz!</h1>
+      <p>Enter your name to begin:</p>
+      <input type="text" id="username" placeholder="Your name" />
+      <br>
+      <button class="btn" onclick="saveUsername()">Start</button>
+    </div>
 
-<div class="container">
-  <div id="start-screen">
-    <h1>Quiz Challenge</h1>
-    <button class="btn" onclick="startQuiz()">Start Quiz</button>
+    <!-- Quiz Screen -->
+    <div id="quiz-screen" class="hide">
+      <div class="progress">
+        <div id="player-name"></div>
+        <div id="question-number"></div>
+      </div>
+      <div class="timer" id="timer"></div>
+      <div class="question-player" id="question-player-name"></div>
+      <div class="question" id="question"></div>
+      <div class="answers" id="answer-buttons"></div>
+      <button class="btn" id="next-btn" onclick="nextQuestion()" disabled>Next</button>
+    </div>
+
+    <!-- Result Screen -->
+    <div id="result-screen" class="hide">
+      <div class="result-title" id="result-message"></div>
+      <div style="margin: 10px 0;" id="result-username"></div>
+      <table>
+        <tr><td>Total Questions</td><td id="total-questions"></td></tr>
+        <tr><td>Attempted</td><td id="attempted"></td></tr>
+        <tr><td>Correct</td><td id="correct"></td></tr>
+        <tr><td>Wrong</td><td id="wrong"></td></tr>
+        <tr><td>Percentage</td><td id="percent"></td></tr>
+      </table>
+      <div style="margin-top: 20px;">
+        <button class="btn" onclick="tryAgain()">Try Again</button>
+        <button class="btn" onclick="goHome()">Go to Home</button>
+      </div>
+    </div>
   </div>
 
-  <div id="quiz-screen" class="hide">
-    <div class="question" id="question"></div>
-    <div class="answers" id="answer-buttons"></div>
-  </div>
+  <script>
+    const questions = [
+      { question: "Which planet is known as the Red Planet?", answers: ["Earth", "Venus", "Mars", "Jupiter"], correct: 2 },
+      { question: "What is the smallest prime number?", answers: ["0", "1", "2", "3"], correct: 2 },
+      { question: "Which language is used to style web pages?", answers: ["HTML", "Python", "CSS", "Java"], correct: 2 },
+      { question: "What does JS stand for?", answers: ["Java Structure", "JavaScript", "Just Style", "Jumper Style"], correct: 1 }
+    ];
 
-  <div id="result-screen" class="hide">
-    <h2>Quiz Finished</h2>
-    <p class="score-section" id="score"></p>
-    <button class="btn" onclick="restartQuiz()">Try Again</button>
-  </div>
-</div>
+    let username = "";
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let timer;
+    let totalTime = 60;
 
-<script>
-  const questions = [
-    {
-      question: "Which planet is known as the Red Planet?",
-      answers: ["Earth", "Venus", "Mars", "Jupiter"],
-      correct: 2
-    },
-    {
-      question: "What is the smallest prime number?",
-      answers: ["0", "1", "2", "3"],
-      correct: 2
-    },
-    {
-      question: "Which language is used to style web pages?",
-      answers: ["HTML", "Python", "CSS", "Java"],
-      correct: 2
-    },
-    {
-      question: "What does JS stand for?",
-      answers: ["Java Structure", "JavaScript", "Just Style", "Jumper Style"],
-      correct: 1
-    }
-  ];
-
-  let currentQuestionIndex = 0;
-  let score = 0;
-
-  const startScreen = document.getElementById('start-screen');
-  const quizScreen = document.getElementById('quiz-screen');
-  const resultScreen = document.getElementById('result-screen');
-  const questionEl = document.getElementById('question');
-  const answerButtonsEl = document.getElementById('answer-buttons');
-  const scoreEl = document.getElementById('score');
-
-  function startQuiz() {
-    startScreen.classList.add('hide');
-    quizScreen.classList.remove('hide');
-    currentQuestionIndex = 0;
-    score = 0;
-    showQuestion();
-  }
-
-  function showQuestion() {
-    resetAnswers();
-    const q = questions[currentQuestionIndex];
-    questionEl.textContent = q.question;
-
-    q.answers.forEach((answer, index) => {
-      const button = document.createElement('button');
-      button.textContent = answer;
-      button.classList.add('answer');
-      button.onclick = () => selectAnswer(index);
-      answerButtonsEl.appendChild(button);
-    });
-  }
-
-  function resetAnswers() {
-    answerButtonsEl.innerHTML = '';
-  }
-
-  function selectAnswer(selectedIndex) {
-    const correctIndex = questions[currentQuestionIndex].correct;
-    const buttons = document.querySelectorAll('.answer');
-
-    buttons.forEach((btn, idx) => {
-      btn.disabled = true;
-      if (idx === correctIndex) {
-        btn.classList.add('correct');
-      } else if (idx === selectedIndex) {
-        btn.classList.add('wrong');
-      }
-    });
-
-    if (selectedIndex === correctIndex) {
-      score++;
+    function saveUsername() {
+      const input = document.getElementById("username");
+      if (!input.value.trim()) return;
+      username = input.value.trim();
+      document.getElementById("username-screen").classList.add("hide");
+      document.getElementById("quiz-screen").classList.remove("hide");
+      document.getElementById("player-name").textContent = `Player: ${username}`;
+      document.getElementById("question-player-name").textContent = username;
+      startTimer();
+      showQuestion();
     }
 
-    setTimeout(() => {
+    function startTimer() {
+      document.getElementById("timer").textContent = `⏳ Time left: ${totalTime}s`;
+      timer = setInterval(() => {
+        totalTime--;
+        document.getElementById("timer").textContent = `⏳ Time left: ${totalTime}s`;
+        if (totalTime <= 0) {
+          clearInterval(timer);
+          showResult();
+        }
+      }, 1000);
+    }
+
+    function showQuestion() {
+      document.getElementById("next-btn").disabled = true;
+      const q = questions[currentQuestionIndex];
+      document.getElementById("question").textContent = q.question;
+      document.getElementById("question-number").textContent = `Q${currentQuestionIndex + 1} of ${questions.length}`;
+      document.getElementById("question-player-name").textContent = username;
+      const answersEl = document.getElementById("answer-buttons");
+      answersEl.innerHTML = "";
+
+      q.answers.forEach((answer, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = answer;
+        btn.classList.add("answer");
+        btn.onclick = () => selectAnswer(i, btn);
+        answersEl.appendChild(btn);
+      });
+    }
+
+    function selectAnswer(index, btn) {
+      const correct = questions[currentQuestionIndex].correct;
+      const buttons = document.querySelectorAll(".answer");
+      buttons.forEach((b, i) => {
+        b.disabled = true;
+        if (i === correct) b.classList.add("correct");
+        else if (i === index) b.classList.add("wrong");
+      });
+      if (index === correct) score++;
+      document.getElementById("next-btn").disabled = false;
+    }
+
+    function nextQuestion() {
       currentQuestionIndex++;
       if (currentQuestionIndex < questions.length) {
         showQuestion();
       } else {
+        clearInterval(timer);
         showResult();
       }
-    }, 1000);
-  }
+    }
 
-  function showResult() {
-    quizScreen.classList.add('hide');
-    resultScreen.classList.remove('hide');
-    scoreEl.textContent = `You scored ${score} out of ${questions.length}`;
-  }
+    function showResult() {
+      document.getElementById("quiz-screen").classList.add("hide");
+      document.getElementById("result-screen").classList.remove("hide");
 
-  function restartQuiz() {
-    resultScreen.classList.add('hide');
-    startScreen.classList.remove('hide');
-  }
-</script>
+      const percent = Math.round((score / questions.length) * 100);
+      const attempted = questions.length;
+      const wrong = attempted - score;
 
+      let msg = percent >= 70 ? "Well Done! 🎉" : percent >= 40 ? "Not Bad! 🙂" : "Bad Luck! 😞";
+
+      document.getElementById("result-message").innerHTML = msg;
+      document.getElementById("result-username").textContent = `Player: ${username}`;
+      document.getElementById("total-questions").textContent = questions.length;
+      document.getElementById("attempted").textContent = attempted;
+      document.getElementById("correct").textContent = score;
+      document.getElementById("wrong").textContent = wrong;
+      document.getElementById("percent").textContent = `${percent}%`;
+    }
+
+    function tryAgain() {
+      currentQuestionIndex = 0;
+      score = 0;
+      totalTime = 60;
+      document.getElementById("result-screen").classList.add("hide");
+      document.getElementById("quiz-screen").classList.remove("hide");
+      document.getElementById("player-name").textContent = `Player: ${username}`;
+      startTimer();
+      showQuestion();
+    }
+
+    function goHome() {
+      location.reload();
+    }
+  </script>
 </body>
 </html>
+
+
